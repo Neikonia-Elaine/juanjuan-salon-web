@@ -14,12 +14,33 @@ html, body, #canvas {
 body {
 	color: white;
 	background-color: black;
-	overflow: hidden;
+	overflow: auto;
 	touch-action: none;
+}
+
+#game-frame {
+	position: relative;
+	width: 1280px;
+	height: 720px;
+	margin: 0 auto;
+	background-color: #231F20;
+}
+
+#game-frame.mobile {
+	position: fixed;
+	width: 100%;
+	height: 100%;
 }
 
 #canvas {
 	display: block;
+	width: 1280px;
+	height: 720px;
+}
+
+#game-frame.mobile #canvas {
+	width: 100%;
+	height: 100%;
 }
 
 #canvas:focus {
@@ -95,7 +116,8 @@ body {
 
 	</head>
 	<body>
-		<canvas id="canvas">
+		<div id="game-frame">
+		<canvas id="canvas" width="1280" height="720" tabindex="-1">
 			Your browser does not support the canvas tag.
 		</canvas>
 
@@ -108,11 +130,18 @@ body {
 			<progress id="status-progress"></progress>
 			<div id="status-notice"></div>
 		</div>
+		</div>
 
 		<script src="娟娟理发店.js"></script>
 		<script>
 const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"娟娟理发店","experimentalVK":false,"fileSizes":{"娟娟理发店.pck":89668212,"娟娟理发店.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
+// Desktop: fixed 1280x720 box. Mobile: fill the whole screen.
+GODOT_CONFIG.canvasResizePolicy = 0;
+if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+	document.getElementById('game-frame').classList.add('mobile');
+	GODOT_CONFIG.canvasResizePolicy = 2;
+}
 const engine = new Engine(GODOT_CONFIG);
 
 (function () {
