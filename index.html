@@ -13,32 +13,28 @@ html, body, #canvas {
 
 body {
 	color: white;
-	background-color: black;
-	overflow: auto;
+	background-color: white;
+	overflow: hidden;
 	touch-action: none;
+	width: 100vw;
+	height: 100vh;
+	height: 100dvh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
+/* Keep 16:9 at any window size, never larger than 1920x1080 (1.5x). */
 #game-frame {
 	position: relative;
-	width: 1280px;
-	height: 720px;
-	margin: 0 auto;
+	width: min(1920px, 100vw, calc(100vh * 16 / 9));
+	width: min(1920px, 100vw, calc(100dvh * 16 / 9));
+	aspect-ratio: 16 / 9;
 	background-color: #231F20;
-}
-
-#game-frame.mobile {
-	position: fixed;
-	width: 100%;
-	height: 100%;
 }
 
 #canvas {
 	display: block;
-	width: 1280px;
-	height: 720px;
-}
-
-#game-frame.mobile #canvas {
 	width: 100%;
 	height: 100%;
 }
@@ -117,7 +113,7 @@ body {
 	</head>
 	<body>
 		<div id="game-frame">
-		<canvas id="canvas" width="1280" height="720" tabindex="-1">
+		<canvas id="canvas" width="1920" height="1080" tabindex="-1">
 			Your browser does not support the canvas tag.
 		</canvas>
 
@@ -136,12 +132,8 @@ body {
 		<script>
 const GODOT_CONFIG = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"娟娟理发店","experimentalVK":false,"fileSizes":{"娟娟理发店.pck":89668212,"娟娟理发店.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
 const GODOT_THREADS_ENABLED = false;
-// Desktop: fixed 1280x720 box. Mobile: fill the whole screen.
+// Canvas renders at 1920x1080 and CSS scales it to fit the window.
 GODOT_CONFIG.canvasResizePolicy = 0;
-if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-	document.getElementById('game-frame').classList.add('mobile');
-	GODOT_CONFIG.canvasResizePolicy = 2;
-}
 const engine = new Engine(GODOT_CONFIG);
 
 (function () {
